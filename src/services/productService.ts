@@ -6,7 +6,7 @@ import productLaptop from '@/assets/product-laptop.jpg';
 import productBackpack from '@/assets/product-backpack.jpg';
 import productSunglasses from '@/assets/product-sunglasses.jpg';
 
-export const products: Item[] = [
+const CATALOG: Item[] = [
   {
     id: 1,
     name: 'Premium High-Top Sneakers',
@@ -72,3 +72,40 @@ export const products: Item[] = [
     category: 'Electronics',
   },
 ];
+
+export const productService = {
+  getAllProducts: () => CATALOG,
+  
+  getProductById: (id: number) => CATALOG.find(p => p.id === id),
+  
+  searchProducts: (query: string) => {
+    const searchTerm = query.toLowerCase();
+    return CATALOG.filter(p =>
+      p.name.toLowerCase().includes(searchTerm) ||
+      p.description.toLowerCase().includes(searchTerm)
+    );
+  },
+  
+  getProductsByCategory: (category: string) => {
+    if (category === 'All') return CATALOG;
+    return CATALOG.filter(p => p.category === category);
+  },
+  
+  filterProducts: (query: string, category: string) => {
+    let filtered = CATALOG;
+    
+    if (category !== 'All') {
+      filtered = filtered.filter(p => p.category === category);
+    }
+    
+    if (query) {
+      const searchTerm = query.toLowerCase();
+      filtered = filtered.filter(p =>
+        p.name.toLowerCase().includes(searchTerm) ||
+        p.description.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    return filtered;
+  },
+};

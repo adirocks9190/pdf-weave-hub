@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAppStore } from '@/store/AppStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -9,8 +8,7 @@ import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const Checkout = () => {
-  const { cart, cartTotal, clearCart } = useCart();
-  const { user } = useAuth();
+  const { cart, auth } = useAppStore();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -18,14 +16,12 @@ export const Checkout = () => {
   const handlePlaceOrder = async () => {
     setIsProcessing(true);
     
-    // Simulate API call to POST /orders
     setTimeout(() => {
       setIsProcessing(false);
       setOrderPlaced(true);
-      clearCart();
+      cart.clearAll();
       toast.success('Order placed successfully!');
       
-      // Redirect to shop after 3 seconds
       setTimeout(() => {
         navigate('/shop');
       }, 3000);
@@ -55,7 +51,7 @@ export const Checkout = () => {
     );
   }
 
-  if (cart.length === 0) {
+  if (cart.items.length === 0) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="max-w-md w-full text-center shadow-elegant">
@@ -69,6 +65,9 @@ export const Checkout = () => {
       </div>
     );
   }
+
+  const taxAmount = cart.totalAmount * 0.1;
+  const finalTotal = cart.totalAmount + taxAmount;
 
   return (
     <div className="min-h-screen bg-background">
@@ -89,7 +88,7 @@ export const Checkout = () => {
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {cart.map((cartItem) => (
+                {cart.items.map((cartItem) => (
                   <div key={cartItem.item.id} className="flex gap-4 pb-4 border-b last:border-0">
                     <img
                       src={cartItem.item.image}
@@ -116,7 +115,7 @@ export const Checkout = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <p className="font-medium">{user?.username}</p>
+                  <p className="font-medium">{auth.user?.username}</p>
                   <p className="text-sm text-muted-foreground">
                     Shipping details will be collected during order processing
                   </p>
@@ -134,7 +133,7 @@ export const Checkout = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span>${cartTotal.toFixed(2)}</span>
+                    <span>${cart.totalAmount.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Shipping</span>
@@ -142,7 +141,7 @@ export const Checkout = () => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Tax</span>
-                    <span>${(cartTotal * 0.1).toFixed(2)}</span>
+                    <span>${taxAmount.toFixed(2)}</span>
                   </div>
                 </div>
                 
@@ -151,7 +150,7 @@ export const Checkout = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Total</span>
                   <span className="text-3xl font-bold gradient-hero bg-clip-text text-transparent">
-                    ${(cartTotal * 1.1).toFixed(2)}
+                    ${finalTotal.toFixed(2)}
                   </span>
                 </div>
 

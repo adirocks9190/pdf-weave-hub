@@ -4,12 +4,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { useCart } from '@/contexts/CartContext';
+import { useAppStore } from '@/store/AppStore';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 export const CartSheet: React.FC = () => {
-  const { cart, cartCount, cartTotal, updateQuantity, removeFromCart } = useCart();
+  const { cart } = useAppStore();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -23,19 +23,19 @@ export const CartSheet: React.FC = () => {
       <SheetTrigger asChild>
         <Button variant="outline" size="sm" className="relative">
           <ShoppingCart className="h-4 w-4" />
-          {cartCount > 0 && (
+          {cart.totalItems > 0 && (
             <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
-              {cartCount}
+              {cart.totalItems}
             </Badge>
           )}
         </Button>
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-lg">
         <SheetHeader>
-          <SheetTitle>Shopping Cart ({cartCount} items)</SheetTitle>
+          <SheetTitle>Shopping Cart ({cart.totalItems} items)</SheetTitle>
         </SheetHeader>
         
-        {cart.length === 0 ? (
+        {cart.items.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[60vh] text-center">
             <ShoppingCart className="h-16 w-16 text-muted-foreground mb-4" />
             <p className="text-lg font-medium">Your cart is empty</p>
@@ -45,7 +45,7 @@ export const CartSheet: React.FC = () => {
           <>
             <ScrollArea className="h-[calc(100vh-200px)] pr-4 mt-6">
               <div className="space-y-4">
-                {cart.map((cartItem) => (
+                {cart.items.map((cartItem) => (
                   <div key={cartItem.item.id} className="flex gap-4 p-4 rounded-lg border bg-card">
                     <img
                       src={cartItem.item.image}
@@ -58,7 +58,7 @@ export const CartSheet: React.FC = () => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => removeFromCart(cartItem.item.id)}
+                          onClick={() => cart.removeItem(cartItem.item.id)}
                         >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
@@ -68,7 +68,7 @@ export const CartSheet: React.FC = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity - 1)}
+                          onClick={() => cart.updateItemQuantity(cartItem.item.id, cartItem.quantity - 1)}
                         >
                           <Minus className="h-3 w-3" />
                         </Button>
@@ -76,7 +76,7 @@ export const CartSheet: React.FC = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity + 1)}
+                          onClick={() => cart.updateItemQuantity(cartItem.item.id, cartItem.quantity + 1)}
                         >
                           <Plus className="h-3 w-3" />
                         </Button>
@@ -93,7 +93,7 @@ export const CartSheet: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Total:</span>
                   <span className="text-2xl font-bold gradient-hero bg-clip-text text-transparent">
-                    ${cartTotal.toFixed(2)}
+                    ${cart.totalAmount.toFixed(2)}
                   </span>
                 </div>
                 <Button className="w-full" size="lg" onClick={handleCheckout}>
