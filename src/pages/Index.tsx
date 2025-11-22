@@ -1,10 +1,10 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAppStore } from '@/store/AppStore';
 
 const Index = () => {
-  const { isAuthenticated } = useAuth();
+  const { auth } = useAppStore();
   
-  if (isAuthenticated) {
+  if (auth.isLoggedIn) {
     return <Navigate to="/shop" replace />;
   }
   

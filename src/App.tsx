@@ -3,26 +3,48 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { CartProvider } from "@/contexts/CartContext";
+import { AppStoreProvider, useAppStore } from "@/store/AppStore";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Shop from "./pages/Shop";
 import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
-import { useAuth } from "@/contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
+  const { auth } = useAppStore();
   
-  if (!isAuthenticated) {
+  if (!auth.isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
   
   return <>{children}</>;
 };
+
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/login" element={<Login />} />
+    <Route
+      path="/shop"
+      element={
+        <ProtectedRoute>
+          <Shop />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/checkout"
+      element={
+        <ProtectedRoute>
+          <Checkout />
+        </ProtectedRoute>
+      }
+    />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -30,31 +52,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-          <CartProvider>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route
-                path="/shop"
-                element={
-                  <ProtectedRoute>
-                    <Shop />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/checkout"
-                element={
-                  <ProtectedRoute>
-                    <Checkout />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </CartProvider>
-        </AuthProvider>
+        <AppStoreProvider>
+          <AppRoutes />
+        </AppStoreProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

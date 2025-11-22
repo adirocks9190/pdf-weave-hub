@@ -3,14 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Item } from '@/types';
-import { useCart } from '@/contexts/CartContext';
+import { useAppStore } from '@/store/AppStore';
 
 interface ProductCardProps {
   product: Item;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const { addToCart } = useCart();
+  const { cart } = useAppStore();
 
   return (
     <Card className="group overflow-hidden border-0 shadow-elegant hover:shadow-xl transition-base">
@@ -37,7 +37,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </p>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button className="w-full" onClick={() => addToCart(product)}>
+        <Button className="w-full" onClick={() => cart.addItem(product)}>
           <ShoppingCart className="mr-2 h-4 w-4" />
           Add to Cart
         </Button>

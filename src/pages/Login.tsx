@@ -5,20 +5,21 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAppStore } from '@/store/AppStore';
 import { ShoppingBag } from 'lucide-react';
+import { APP_CONFIG } from '@/config/constants';
 import heroBanner from '@/assets/hero-banner.jpg';
 
 export const Login = () => {
   const [loginData, setLoginData] = useState({ username: '', password: '' });
   const [signupData, setSignupData] = useState({ username: '', password: '', confirmPassword: '' });
-  const { login, signup } = useAuth();
+  const { auth } = useAppStore();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(loginData.username, loginData.password);
+      await auth.signIn(loginData.username, loginData.password);
       navigate('/shop');
     } catch (error) {
       window.alert('Invalid username/password');
@@ -32,7 +33,7 @@ export const Login = () => {
       return;
     }
     try {
-      await signup(signupData.username, signupData.password);
+      await auth.register(signupData.username, signupData.password);
       navigate('/shop');
     } catch (error) {
       window.alert('Signup failed. Please try again.');
@@ -51,7 +52,7 @@ export const Login = () => {
           <div className="text-primary-foreground space-y-6 max-w-md">
             <ShoppingBag className="h-16 w-16" />
             <h1 className="text-5xl font-bold leading-tight">
-              Welcome to ShopHub
+              Welcome to {APP_CONFIG.name}
             </h1>
             <p className="text-lg opacity-90">
               Discover amazing products at unbeatable prices. Start your shopping journey today.
@@ -65,7 +66,7 @@ export const Login = () => {
           <div className="text-center lg:hidden mb-8">
             <ShoppingBag className="h-12 w-12 mx-auto mb-4 text-primary" />
             <h1 className="text-3xl font-bold gradient-hero bg-clip-text text-transparent">
-              ShopHub
+              {APP_CONFIG.name}
             </h1>
           </div>
 
