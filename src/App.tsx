@@ -7,6 +7,7 @@ import { AppStoreProvider, useAppStore } from "@/store/AppStore";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Shop from "./pages/Shop";
+import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 
@@ -31,6 +32,14 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <Shop />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/product/:id"
+      element={
+        <ProtectedRoute>
+          <ProductDetail />
         </ProtectedRoute>
       }
     />

@@ -1,4 +1,4 @@
-import { ShoppingCart, User, LogOut } from 'lucide-react';
+import { ShoppingBag, Heart, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { SearchBar } from './SearchBar';
@@ -12,7 +12,7 @@ interface TopBarProps {
 }
 
 export const TopBar: React.FC<TopBarProps> = ({ searchQuery, onSearchChange }) => {
-  const { auth, cart } = useAppStore();
+  const { auth, cart, wishlist } = useAppStore();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
@@ -31,6 +31,14 @@ export const TopBar: React.FC<TopBarProps> = ({ searchQuery, onSearchChange }) =
             <User className="h-4 w-4" />
             <span className="hidden md:inline text-sm font-medium">{auth.user?.username}</span>
           </div>
+          <Button variant="outline" size="sm" className="relative">
+            <Heart className="h-4 w-4" />
+            {wishlist.count > 0 && (
+              <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                {wishlist.count}
+              </Badge>
+            )}
+          </Button>
           <CartSheet />
           <Button variant="outline" size="sm" onClick={auth.signOut}>
             <LogOut className="h-4 w-4 mr-2" />
