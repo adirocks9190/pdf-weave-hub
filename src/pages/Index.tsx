@@ -1,14 +1,7 @@
-import { Navigate } from 'react-router-dom';
-import { useAppStore } from '@/store/AppStore';
+import Home from './Home';
 
 const Index = () => {
-  const { auth } = useAppStore();
-  
-  if (auth.isLoggedIn) {
-    return <Navigate to="/shop" replace />;
-  }
-  
-  return <Navigate to="/login" replace />;
+  return <Home />;
 };
 
 export default Index;

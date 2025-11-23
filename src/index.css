@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
+    --background: 0 0% 99%;
     --foreground: 220 20% 15%;
 
     --card: 0 0% 100%;
@@ -20,10 +20,10 @@ All colors MUST be HSL.
     --primary: 14 90% 55%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 100% 96%;
+    --secondary: 210 100% 97%;
     --secondary-foreground: 220 20% 15%;
 
-    --muted: 220 15% 95%;
+    --muted: 220 15% 96%;
     --muted-foreground: 220 10% 45%;
 
     --accent: 43 96% 56%;
@@ -32,8 +32,8 @@ All colors MUST be HSL.
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 88%;
-    --input: 220 15% 92%;
+    --border: 220 15% 90%;
+    --input: 220 15% 94%;
     --ring: 14 90% 55%;
 
     --radius: 0.75rem;
@@ -41,15 +41,21 @@ All colors MUST be HSL.
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
     
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    
     --gradient-hero: linear-gradient(135deg, hsl(14 90% 55%) 0%, hsl(25 95% 60%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 15% 98%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 15% 99%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(43 96% 56%) 0%, hsl(14 90% 55%) 100%);
     
     --shadow-sm: 0 1px 2px 0 hsl(220 15% 15% / 0.05);
     --shadow-md: 0 4px 6px -1px hsl(220 15% 15% / 0.08);
     --shadow-lg: 0 10px 15px -3px hsl(220 15% 15% / 0.1);
     --shadow-xl: 0 20px 25px -5px hsl(220 15% 15% / 0.12);
+    --shadow-glow: 0 0 20px hsl(14 90% 55% / 0.3);
     
     --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -131,11 +137,23 @@ All colors MUST be HSL.
     background: var(--gradient-card);
   }
   
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+  
   .shadow-elegant {
     box-shadow: var(--shadow-lg);
   }
   
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
   .transition-base {
     transition: var(--transition-base);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
   }
 }

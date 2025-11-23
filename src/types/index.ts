@@ -12,6 +12,13 @@ export interface Item {
   description: string;
   image: string;
   category: string;
+  rating?: number;
+  reviews?: number;
+  originalPrice?: number;
+  badge?: 'New' | 'Sale' | 'Hot' | 'Limited';
+  images?: string[];
+  inStock?: boolean;
+  brand?: string;
 }
 
 export interface CartItem {

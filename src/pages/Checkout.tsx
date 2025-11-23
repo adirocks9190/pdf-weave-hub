@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store/AppStore';
 import { Button } from '@/components/ui/button';
+import { Footer } from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
@@ -171,6 +172,8 @@ export const Checkout = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };
